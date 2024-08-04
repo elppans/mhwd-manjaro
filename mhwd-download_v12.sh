@@ -34,7 +34,7 @@ MANJARO_GPG_URL="https://gitlab.manjaro.org/packages/core/manjaro-keyring/-/raw/
 MHWD_URL="https://mirror.csclub.uwaterloo.ca/manjaro/stable/extra/x86_64/"
 
 # Specify the directory where the files will be downloaded and extracted
-TARGET_DIRECTORY="/opt/mjr"
+TARGET_DIRECTORY="/tmp/mjr"
 
 # Change to the target directory
 mkdir -p ${TARGET_DIRECTORY}
@@ -56,17 +56,17 @@ echo -e "${WHITE}*************************${NC}"
 echo
 
 # Import manjaro.gpg if not already installed
-if ! gpg --list-keys manjaro >/dev/null 2>&1; then
-    echo -e "${CYAN}Importing manjaro.gpg...${NC}"
-    echo
-    curl -s "$MANJARO_GPG_URL" | gpg --import
-    echo
-    echo -e "${GREEN}manjaro.gpg imported successfully!${NC}"
-else
-    echo -e "${GREEN}manjaro.gpg is already installed.${NC}"
-fi
+#if ! gpg --list-keys manjaro >/dev/null 2>&1; then
+#    echo -e "${CYAN}Importing manjaro.gpg...${NC}"
+#    echo
+#    curl -s "$MANJARO_GPG_URL" | gpg --import
+#    echo
+#    echo -e "${GREEN}manjaro.gpg imported successfully!${NC}"
+#else
+#    echo -e "${GREEN}manjaro.gpg is already installed.${NC}"
+#fi
 
-echo
+#echo
 
 printf "${YELLOW}Retrieving list of mhwd-manjaro files..."
 
@@ -123,7 +123,7 @@ while [ "$RETRY_COUNT" -lt "$MAX_RETRIES" ]; do
     done < /tmp/file_list
 
     # Remove the temporary file
-    rm /tmp/file_list
+ #   rm /tmp/file_list
 
     # Remove duplicate lines
     UNIQUE_FILE_LIST=$(echo "$FILE_LIST" | tr ' ' '\n' | sort | uniq)
@@ -154,17 +154,17 @@ download_and_extract() {
         echo -e "${YELLOW}Downloading $FILE_NAME...${NC}"
         curl -s -O "$MHWD_URL$FILE_NAME" > /dev/null
 
-        echo -e "${YELLOW}Downloading $PGP_FILE_NAME...${NC}"
-        curl -s -O "$MHWD_URL$PGP_FILE_NAME" > /dev/null
+        #echo -e "${YELLOW}Downloading $PGP_FILE_NAME...${NC}"
+        #curl -s -O "$MHWD_URL$PGP_FILE_NAME" > /dev/null
 
-        echo -e "${GREEN}Verifying $FILE_NAME...${NC}"
-        GPG_OUTPUT=$(gpg --verify "$PGP_FILE_NAME" "$FILE_NAME" 2>&1)
-        if [[ $GPG_OUTPUT =~ "Good signature" ]]; then
-            echo -e "${GREEN}Verification successful!${NC}"
-        else
-            echo -e "${RED}Verification failed:${NC}"
-            echo "$GPG_OUTPUT"
-        fi
+        #echo -e "${GREEN}Verifying $FILE_NAME...${NC}"
+        #GPG_OUTPUT=$(gpg --verify "$PGP_FILE_NAME" "$FILE_NAME" 2>&1)
+        #if [[ $GPG_OUTPUT =~ "Good signature" ]]; then
+        #    echo -e "${GREEN}Verification successful!${NC}"
+        #else
+        #    echo -e "${RED}Verification failed:${NC}"
+        #    echo "$GPG_OUTPUT"
+        #fi
 
         echo -e "${CYAN}Extracting $FILE_NAME...${NC}"
         tar -xf "$FILE_NAME" -C "$TARGET_DIRECTORY"
@@ -194,10 +194,10 @@ for FILE in $FILE_LIST; do
     fi
 done
 
-rm ${TARGET_DIRECTORY}.BUILDINFO >/dev/null 2>&1
-rm ${TARGET_DIRECTORY}.INSTALL >/dev/null 2>&1
-rm ${TARGET_DIRECTORY}.PKGINFO >/dev/null 2>&1
-rm ${TARGET_DIRECTORY}.MTREE >/dev/null 2>&1
+rm ${TARGET_DIRECTORY}/.BUILDINFO >/dev/null 2>&1
+rm ${TARGET_DIRECTORY}/.INSTALL >/dev/null 2>&1
+rm ${TARGET_DIRECTORY}/.PKGINFO >/dev/null 2>&1
+rm ${TARGET_DIRECTORY}/.MTREE >/dev/null 2>&1
 
 echo
 echo -e "${GREEN}Cleanup completed${NC}"
