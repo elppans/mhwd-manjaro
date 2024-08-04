@@ -34,7 +34,7 @@ MANJARO_GPG_URL="https://gitlab.manjaro.org/packages/core/manjaro-keyring/-/raw/
 MHWD_URL="https://mirror.csclub.uwaterloo.ca/manjaro/stable/extra/x86_64/"
 
 # Specify the directory where the files will be downloaded and extracted
-TARGET_DIRECTORY="/tmp/mjr"
+TARGET_DIRECTORY="/opt/mjr"
 
 # Change to the target directory
 mkdir -p ${TARGET_DIRECTORY}
